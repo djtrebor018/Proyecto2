@@ -1,0 +1,8 @@
+@if (loading) {
+  <app-loading></app-loading>
+} @else {
+  @if (Rol === 'Admin') {
+    <app-admin-navbar></app-admin-navbar>
+  } 
+  <router-outlet />
+}

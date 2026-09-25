@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg bg-success">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/dashboard" routerLinkActive="active" >
+      <img src="assets/Logo.jpeg" alt="Logo" width="45" height="45" class="me-2 rounded-circle">Dashboard</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page"  routerLink="/pagos" routerLinkActive="active">Pagos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/horario" routerLinkActive="active">Horarios</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/contrato" routerLinkActive="active">Contratos</a>
+        </li>
+        
+      </ul>
+      <form class="d-flex" role="search">
+        <button class="btn btn-danger" (click)="Salir()">Salir</button>
+      </form>
+    </div>
+  </div>
+</nav>
