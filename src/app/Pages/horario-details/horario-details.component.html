@@ -1,0 +1,22 @@
+@if (loading) {
+  <app-loading></app-loading>
+} @else if (horario) {
+  <div class="container mt-3">
+    <div class="card">
+      <div class="card-header fw-bold">
+        {{ horario.PrimerDia.Dia }} y {{ horario.SegundoDia.Dia }}
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ horario.Hora_Inicio }} - {{ horario.Hora_Fin }}</h5>
+        <p class="card-text mb-2">Cupo máximo: {{ horario.Cumpo_Maximo }}</p>
+        <span class="badge"
+              [class.text-bg-success]="horario.Estado === 'Disponible'"
+              [class.text-bg-danger]="horario.Estado === 'lleno'">
+          {{ horario.Estado }}
+        </span>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="alert alert-warning">No se pudo cargar el horario.</div>
+}

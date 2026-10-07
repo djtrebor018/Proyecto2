@@ -1,0 +1,52 @@
+<div class="container py-4">
+
+  <!-- Banner de bienvenida -->
+  <section class="hero rounded-4 shadow-sm p-4 p-md-5 mb-4">
+    <p class="hero-eyebrow mb-1">Panel principal</p>
+    <h1 class="hero-title mb-2">Bienvenido, {{ Nombre }}!</h1>
+    <p class="hero-text mb-4">
+      Desde aquí puedes revisar tus horarios, registrar tus pagos y consultar tus contratos.
+    </p>
+    <a routerLink="/horarios" class="btn btn-gold fw-bold px-4">Ver horarios</a>
+  </section>
+
+  <!-- Accesos rápidos -->
+  <div class="row g-3">
+    <div class="col-12 col-md-4">
+      <a routerLink="/horarios" class="text-decoration-none">
+        <div class="card quick-card h-100 shadow-sm">
+          <div class="card-body">
+            <div class="quick-icon mb-3">🕒</div>
+            <h2 class="h5 text-dark">Horarios</h2>
+            <p class="text-secondary mb-0">Consulta los horarios disponibles y elige el tuyo.</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <a routerLink="/registro-pagos" class="text-decoration-none">
+        <div class="card quick-card h-100 shadow-sm">
+          <div class="card-body">
+            <div class="quick-icon mb-3">💳</div>
+            <h2 class="h5 text-dark">Registro de pagos</h2>
+            <p class="text-secondary mb-0">Paga tu inscripción con tarjeta o PayPal.</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <a routerLink="/contratos" class="text-decoration-none">
+        <div class="card quick-card h-100 shadow-sm">
+          <div class="card-body">
+            <div class="quick-icon mb-3">📄</div>
+            <h2 class="h5 text-dark">Contratos</h2>
+            <p class="text-secondary mb-0">Revisa el estado y las fechas de tu contrato.</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>

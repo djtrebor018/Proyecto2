@@ -29,21 +29,30 @@ export class RegisroComponent {
       Password: ['', [Validators.required, Validators.minLength(6)]],
       Tipo_Usuario: ['', Validators.required],
       Matricula: [''],
-      Cedula: ['',],
+      Cedula: [''],
    })
    } 
    onSubmit(): void {
     if (this.registroForm.invalid) {
       this.registroForm.markAllAsTouched();
-      return;
+      
     }
+     const datos = { ...this.registroForm.value };
+    datos.Matricula = datos.Matricula?.trim() || null;
+    datos.Cedula = datos.Cedula?.trim() || null;
+
      this.api.registro(this.registroForm.value).subscribe({
       next: (response:any)=>{
-        this._router.navigate(['/dashboard'])
+        this._router.navigate(['/horario'])
       },
       error:(err)=>{
-      this.errorMessage = err.error?.msg || 'Ocurrió un error al iniciar sesión.';
-       console.error('Login error:', err.error.msg);
+      const listaErrores = err.error?.errors;
+  if (listaErrores && listaErrores.length > 0) {
+    this.errorMessage = listaErrores.map((e: any) => e.msg).join(' | ');
+  } else {
+    this.errorMessage = 'Ocurrió un error al registrarse.';
+  }
+  console.error('Registro error:', err.error);
       }
      })
 

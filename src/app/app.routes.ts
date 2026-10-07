@@ -11,7 +11,7 @@ export const routes: Routes = [
 { path: 'registro', component: RegisroComponent },
 { path: 'dashboard', component: DashboardComponent },
 { path: 'horario', component: HorariosComponent },
-{ path: 'pagos', component: PagosComponent },
+{ path: 'pagos/:id', component: PagosComponent },
 { path: 'contrato', component: ContratosComponent },
 { path: '**', redirectTo: '' }
 

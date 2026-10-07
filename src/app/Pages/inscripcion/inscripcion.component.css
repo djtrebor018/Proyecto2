@@ -1,0 +1,22 @@
+.btn-gold {
+  --bs-btn-color: #212529;
+  --bs-btn-bg: #E0B300;
+  --bs-btn-border-color: #E0B300;
+
+  --bs-btn-hover-color: #212529;
+  --bs-btn-hover-bg: #C79F00;
+  --bs-btn-hover-border-color: #C79F00;
+
+  --bs-btn-active-color: #212529;
+  --bs-btn-active-bg: #B38F00;
+  --bs-btn-active-border-color: #B38F00;
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: #198754;
+  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+
+.paypal-box {
+  min-height: 48px;
+}

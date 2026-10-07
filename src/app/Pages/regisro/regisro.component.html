@@ -40,14 +40,14 @@
       </select>
     </div>
 
-    @if (registroForm.get('Tipo_Usuario')?.value === 'Estudiante' || registroForm.get('tipoUsuario')?.value === 'Maestro' ) {
+    @if (registroForm.get('Tipo_Usuario')?.value === 'Estudiante' || registroForm.get('Tipo_Usuario')?.value === 'Maestro' ) {
       <div class="mb-3">
         <label for="matricula" class="form-label">Matrícula</label>
         <input type="text" class="form-control" id="matricula" formControlName="Matricula">
       </div>
     }
 
-    @if (registroForm.get('tipoUsuario')?.value === 'Externo') {
+    @if (registroForm.get('Tipo_Usuario')?.value === 'Externo') {
       <div class="mb-3">
         <label for="cedula" class="form-label">Cédula</label>
         <input type="text" class="form-control" id="cedula" formControlName="Cedula">

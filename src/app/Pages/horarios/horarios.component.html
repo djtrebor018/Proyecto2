@@ -1,1 +1,39 @@
-<p>horarios works!</p>
+
+@if (loading) {
+<app-loading></app-loading>
+}
+
+<div class="container mt-3 mb-5">
+  <div class="row g-3">
+    @for (h of Horario; track h.ID_Horario) {
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="card h-100">
+          <div class="card-header fw-bold">
+            {{ h.PrimerDia.Dia }} y {{ h.SegundoDia.Dia }}
+          </div>
+  
+          <div class="card-body">
+            <h5 class="card-title">
+              {{ h.Hora_Inicio }} - {{ h.Hora_Fin}}
+            </h5>
+            <p class="card-text mb-2">Cupo máximo: {{ h.Cumpo_Maximo }}</p>
+            <span class="badge"
+                  [class.text-bg-success]="h.Estado === 'Disponible'"
+                  [class.text-bg-danger]="h.Estado === 'lleno'">
+              {{ h.Estado }}
+            </span>
+          </div>
+  
+          <div class="card-footer">
+            <button class="btn btn-gold  btn-sm w-100"
+                    [disabled]="h.Estado === 'lleno'"
+                 [routerLink]="['/pagos', h.ID_Horario]"    >
+              Seleccionar
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
