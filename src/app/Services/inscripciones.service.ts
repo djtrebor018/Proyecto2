@@ -6,7 +6,7 @@ import { AuthServicesService } from './auth-services.service';
   providedIn: 'root'
 })
 export class InscripcionesService {
-  private baseUrl: string = 'http://localhost:3000/inscripciones';
+  private baseUrl: string = 'http://localhost:8000/Api/Inscripciones';
   constructor( 
     private _http: HttpClient,
     private _api :AuthServicesService
@@ -19,5 +19,10 @@ export class InscripcionesService {
           });
     return this._http.post(`${this.baseUrl}`, inscripcion,{headers});
   }
+  obtenerMiHorario() {
+  const token = this._api.getToken();
+  const headers = new HttpHeaders({ 'token': token || '' });
+  return this._http.get<{ inscripciones: any[] }>(`${this.baseUrl}`, { headers });
+}
 
 }

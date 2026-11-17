@@ -11,7 +11,23 @@ export type NombreDia =
   | 'Sabado';
 
 export interface DiaNombre {
+  ID_Dia?: number;
   Dia: NombreDia;
+}
+
+export interface DiaHorario {
+  ID_Dia: number;
+  Dia: NombreDia;
+  Estado?: boolean;
+}
+
+export interface HorarioPayload {
+  Dia1: number;
+  Dia2: number;
+  Hora_Inicio: string;
+  Hora_Fin: string;
+  Cumpo_Maximo: number;
+  Estado: EstadoHorario;
 }
 
 export interface Horario {

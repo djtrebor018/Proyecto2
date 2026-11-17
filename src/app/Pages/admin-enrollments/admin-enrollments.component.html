@@ -1,0 +1,51 @@
+<main class="container py-4" aria-labelledby="admin-enrollments-title">
+  <header class="mb-4">
+    <p class="text-success text-uppercase fw-semibold small mb-1">{{ 'ADMIN.TITLE' | translate }}</p>
+    <h1 id="admin-enrollments-title" class="h3 mb-0">{{ 'ADMIN.ENROLLMENTS_TITLE' | translate }}</h1>
+  </header>
+
+  @if (loading) {
+    <p class="text-secondary" role="status">{{ 'ADMIN.ENROLLMENTS_LOADING' | translate }}</p>
+  } @else if (error) {
+    <div class="alert alert-danger d-flex flex-wrap justify-content-between align-items-center gap-2" role="alert">
+      <span>{{ 'ADMIN.ENROLLMENTS_ERROR' | translate }}</span>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="cargarInscripciones()">
+        {{ 'ADMIN.RETRY' | translate }}
+      </button>
+    </div>
+  } @else if (inscripciones.length === 0) {
+    <p class="text-secondary">{{ 'ADMIN.ENROLLMENTS_EMPTY' | translate }}</p>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th scope="col">{{ 'ADMIN.NUMBER_SHORT' | translate }}</th>
+            <th scope="col">{{ 'COMMON.NAME' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.ENROLLMENT_DATE' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.ENROLLMENT_SCHEDULE' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (inscripcion of inscripciones; track inscripcion.ID_Inscripcion) {
+            <tr>
+              <th scope="row">{{ inscripcion.ID_Inscripcion }}</th>
+              <td>{{ nombreUsuario(inscripcion.ID_Usuario) }}</td>
+              <td>{{ inscripcion.Fecha }}</td>
+              <td>
+                @if (inscripcion.Horario; as horario) {
+                  {{ ('DAYS.' + (horario.PrimerDia?.Dia ?? '').toUpperCase()) | translate }}
+                  /
+                  {{ ('DAYS.' + (horario.SegundoDia?.Dia ?? '').toUpperCase()) | translate }},
+                  {{ horario.Hora_Inicio }} – {{ horario.Hora_Fin }}
+                } @else {
+                  —
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</main>

@@ -1,0 +1,11 @@
+.navbar {
+  --bs-navbar-color: rgba(255, 255, 255, 0.85);
+  --bs-navbar-hover-color: #e0b300;
+  --bs-navbar-active-color: #e0b300;
+  --bs-navbar-brand-color: #ffffff;
+  --bs-navbar-brand-hover-color: #e0b300;
+}
+
+.navbar .nav-link.active {
+  font-weight: 600;
+}

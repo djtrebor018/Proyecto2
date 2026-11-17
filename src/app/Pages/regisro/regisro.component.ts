@@ -4,11 +4,12 @@ import { Router, RouterLink } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { AuthServicesService } from '../../Services/auth-services.service';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-regisro',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslateModule],
   templateUrl: './regisro.component.html',
   styleUrl: './regisro.component.css'
 })
@@ -47,11 +48,9 @@ export class RegisroComponent {
       },
       error:(err)=>{
       const listaErrores = err.error?.errors;
-  if (listaErrores && listaErrores.length > 0) {
-    this.errorMessage = listaErrores.map((e: any) => e.msg).join(' | ');
-  } else {
-    this.errorMessage = 'Ocurrió un error al registrarse.';
-  }
+      this.errorMessage = listaErrores?.length
+        ? listaErrores.map((error: { msg: string }) => error.msg).join(' | ')
+        : 'ERRORS.REGISTRATION';
   console.error('Registro error:', err.error);
       }
      })

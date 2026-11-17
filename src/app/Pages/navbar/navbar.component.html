@@ -1,25 +1,71 @@
 <nav class="navbar navbar-expand-lg bg-success">
   <div class="container-fluid">
     <a class="navbar-brand" routerLink="/dashboard" routerLinkActive="active" >
-      <img src="assets/Logo.jpeg" alt="Logo" width="45" height="45" class="me-2 rounded-circle">Dashboard</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <img src="assets/Logo.jpeg" alt="Logo" width="45" height="45" class="me-2 rounded-circle">{{ 'NAV.DASHBOARD' | translate }}</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" [attr.aria-label]="'COMMON.TOGGLE_NAV' | translate">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page"  routerLink="/pagos" routerLinkActive="active">Pagos</a>
+          <a class="nav-link active" aria-current="page"  routerLink="/facturacion" routerLinkActive="active">{{ 'NAV.PAYMENTS' | translate }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/horario" routerLinkActive="active">Horarios</a>
+          <a class="nav-link" routerLink="/horario" routerLinkActive="active">{{ 'NAV.SCHEDULES' | translate }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/contrato" routerLinkActive="active">Contratos</a>
+          <a class="nav-link" routerLink="/contrato" routerLinkActive="active">{{ 'NAV.CONTRACTS' | translate }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/ayuda" routerLinkActive="active">{{ 'NAV.HELP' | translate }}</a>
         </li>
         
       </ul>
+         <!-- Notificaciones -->
+      <div class="position-relative me-3 mb-2 mb-lg-0">
+        <button type="button" class="btn btn-link nav-link position-relative p-1 notif-btn"
+                [attr.aria-label]="'NOTIFICATIONS.TITLE' | translate" (click)="alternarNotificaciones()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+          </svg>
+
+          @if (noLeidas > 0) {
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ noLeidas > 9 ? '9+' : noLeidas }}
+              <span class="visually-hidden">{{ 'NOTIFICATIONS.UNREAD' | translate }}</span>
+            </span>
+          }
+        </button>
+
+        @if (menuAbierto) {
+          <div class="dropdown-menu show notif-menu shadow">
+            <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+              <strong>{{ 'NOTIFICATIONS.TITLE' | translate }}</strong>
+              @if (noLeidas > 0) {
+                <button type="button" class="btn btn-link btn-sm p-0 text-success" (click)="marcarTodas()">
+                  {{ 'NOTIFICATIONS.MARK_ALL_READ' | translate }}
+                </button>
+              }
+            </div>
+
+            <div class="notif-lista">
+              @for (n of notificaciones; track n.id) {
+                <button type="button" class="dropdown-item notif-item" [class.no-leida]="!n.leida"
+                        (click)="marcarLeida(n)">
+                  <div class="fw-semibold">{{ n.titulo | translate }}</div>
+                  <div class="small text-secondary text-wrap">{{ n.mensaje | translate }}</div>
+                  <div class="small text-muted">{{ n.fecha | translate }}</div>
+                </button>
+              } @empty {
+                <p class="text-center text-secondary my-3 mb-3">{{ 'NOTIFICATIONS.EMPTY' | translate }}</p>
+              }
+            </div>
+          </div>
+        }
+      </div>
+      <app-language-switcher></app-language-switcher>
       <form class="d-flex" role="search">
-        <button class="btn btn-danger" (click)="Salir()">Salir</button>
+        <button class="btn btn-danger" (click)="Salir()">{{ 'NAV.LOGOUT' | translate }}</button>
       </form>
     </div>
   </div>

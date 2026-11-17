@@ -2,60 +2,63 @@
   <form  [formGroup]="registroForm" (ngSubmit)="onSubmit()">
     <div class="text-center mb-4">
       <img src="assets/Logo.jpeg" alt="Logo" class="mb-3" style="max-width: 120px;">
-      <h2>Registro</h2>
+      <h2>{{ 'REGISTER.TITLE' | translate }}</h2>
     </div>
      @if (errorMessage) {
   <div class="alert alert-danger" role="alert">
-    {{ errorMessage }}
+         {{ errorMessage | translate }}
   </div>
 }
 
     <div class="mb-3">
-      <label for="nombre" class="form-label">Nombre</label>
+      <label for="nombre" class="form-label">{{ 'COMMON.NAME' | translate }}</label>
       <input type="text" class="form-control" id="nombre" formControlName="Nombre">
     </div>
 
     <div class="mb-3">
-      <label for="correo" class="form-label">Correo</label>
+      <label for="correo" class="form-label">{{ 'COMMON.EMAIL' | translate }}</label>
       <input type="email" class="form-control" id="correo" formControlName="Correo">
     </div>
 
     <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
+      <label for="password" class="form-label">{{ 'COMMON.PASSWORD' | translate }}</label>
       <div class="input-group">
         <input [type]="mostrarPassword ? 'text' : 'password'" class="form-control" id="password" formControlName="Password">
-        <span class="input-group-text" style="cursor: pointer;" (click)="mostrarPassword = !mostrarPassword">
+        <span class="input-group-text" style="cursor: pointer;" [attr.aria-label]="(mostrarPassword ? 'COMMON.HIDE_PASSWORD' : 'COMMON.SHOW_PASSWORD') | translate" (click)="mostrarPassword = !mostrarPassword">
           <i class="bi" [ngClass]="mostrarPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
         </span>
       </div>
     </div>
 
     <div class="mb-3">
-      <label for="tipoUsuario" class="form-label">Tipo de usuario</label>
+      <label for="tipoUsuario" class="form-label">{{ 'REGISTER.USER_TYPE' | translate }}</label>
       <select class="form-select" id="tipoUsuario" formControlName="Tipo_Usuario">
-        <option value="" disabled selected>Selecciona una opción</option>
-        <option value="Estudiante">Estudiante</option>
-        <option value="Maestro">Maestro</option>
-        <option value="Externo">Externo</option>
+        <option value="" disabled selected>{{ 'COMMON.SELECT_OPTION' | translate }}</option>
+        <option value="Estudiante">{{ 'USER_TYPES.STUDENT' | translate }}</option>
+        <option value="Maestro">{{ 'USER_TYPES.TEACHER' | translate }}</option>
+        <option value="Externo">{{ 'USER_TYPES.EXTERNAL' | translate }}</option>
       </select>
     </div>
 
     @if (registroForm.get('Tipo_Usuario')?.value === 'Estudiante' || registroForm.get('Tipo_Usuario')?.value === 'Maestro' ) {
       <div class="mb-3">
-        <label for="matricula" class="form-label">Matrícula</label>
+        <label for="matricula" class="form-label">{{ 'REGISTER.STUDENT_ID' | translate }}</label>
         <input type="text" class="form-control" id="matricula" formControlName="Matricula">
       </div>
     }
 
     @if (registroForm.get('Tipo_Usuario')?.value === 'Externo') {
       <div class="mb-3">
-        <label for="cedula" class="form-label">Cédula</label>
+        <label for="cedula" class="form-label">{{ 'REGISTER.ID_NUMBER' | translate }}</label>
         <input type="text" class="form-control" id="cedula" formControlName="Cedula">
       </div>
     }
     <div class="d-flex justify-content-between">
-      <button type="submit" class="btn btn-success" >Registrarse</button>
-      <button type="button" class="btn btn-outline-success" routerLink="">Volver al login</button>
+      <button type="submit" class="btn btn-success">{{ 'REGISTER.SUBMIT' | translate }}</button>
+      <button type="button" class="btn btn-outline-success" routerLink="">{{ 'REGISTER.BACK_TO_LOGIN' | translate }}</button>
+    </div>
+    <div class="border-top mt-4 pt-3">
+      <a class="small text-success" routerLink="/ayuda" [queryParams]="{ guia: 'registration' }">{{ 'HELP.REGISTRATION_GUIDE_LINK' | translate }}</a>
     </div>
   </form>
 </div>

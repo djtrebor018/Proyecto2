@@ -4,11 +4,12 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { OnInit,Input } from '@angular/core';
 import { Horario } from '../../models/horario.model';
 import { LoadingComponent } from '../loading/loading.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-horario-details',
   standalone: true,
-  imports: [LoadingComponent],
+  imports: [LoadingComponent, TranslateModule],
   templateUrl: './horario-details.component.html',
   styleUrl: './horario-details.component.css'
 })

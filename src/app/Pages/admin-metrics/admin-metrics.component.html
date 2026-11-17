@@ -1,0 +1,96 @@
+<section id="ingresos" class="container py-4" aria-labelledby="income-metrics-title">
+  <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+    <div>
+      <p class="text-success text-uppercase fw-semibold small mb-1">{{ 'METRICS.EYEBROW' | translate }}</p>
+      <h2 id="income-metrics-title" class="h3 mb-0">{{ 'METRICS.TITLE' | translate }}</h2>
+    </div>
+    @if (metricas) {
+      <span class="badge text-bg-light border">{{ metricas.zonaHoraria }}</span>
+    }
+  </div>
+
+  @if (cargando) {
+    <p class="text-secondary" role="status">{{ 'METRICS.LOADING' | translate }}</p>
+  } @else if (error) {
+    <div class="alert alert-danger d-flex flex-wrap justify-content-between align-items-center gap-2" role="alert">
+      <span>{{ 'METRICS.ERROR' | translate }}</span>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="cargarMetricas()">
+        {{ 'METRICS.RETRY' | translate }}
+      </button>
+    </div>
+  } @else if (metricas) {
+    <div class="row g-3 mb-4">
+      @for (periodo of [
+        { key: 'DAY', summary: metricas.resumen.dia },
+        { key: 'MONTH', summary: metricas.resumen.mes },
+        { key: 'YEAR', summary: metricas.resumen.anio }
+      ]; track periodo.key) {
+        <div class="col-12 col-md-4">
+          <article class="card metric-card h-100 shadow-sm">
+            <div class="card-body">
+              <h3 class="h6 text-secondary">{{ ('METRICS.' + periodo.key) | translate }}</h3>
+              <p class="metric-total mb-2">{{ formatearMonto(periodo.summary.total) }}</p>
+              <p class="small text-secondary mb-0">
+                {{ 'METRICS.PAYMENTS_COUNT' | translate:{ count: periodo.summary.cantidadPagos } }}
+              </p>
+            </div>
+          </article>
+        </div>
+      }
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-lg-6">
+        <section class="card shadow-sm h-100">
+          <div class="card-body">
+            <h3 class="h5 mb-3">{{ 'METRICS.MONTHLY_INCOME' | translate }}</h3>
+            <div class="bar-chart monthly-chart">
+              @for (item of metricas.ingresosPorMes; track item.periodo) {
+                <div class="bar-column">
+                  <div class="bar-track" role="progressbar"
+                       [attr.aria-label]="nombreMes(item.periodo) + ': ' + formatearMonto(item.total)"
+                       [attr.title]="formatearMonto(item.total)"
+                       [attr.aria-valuenow]="item.total"
+                       [attr.aria-valuemax]="maximoTotal(metricas.ingresosPorMes)"
+                       aria-valuemin="0"
+                       aria-orientation="vertical">
+                    <div class="bar-fill"
+                         [style.height.%]="porcentaje(item.total, maximoTotal(metricas.ingresosPorMes))"></div>
+                  </div>
+                  <span class="bar-label">{{ nombreMes(item.periodo) }}</span>
+                  <span class="bar-count">{{ 'METRICS.PAYMENTS_COUNT' | translate:{ count: item.cantidadPagos } }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <section class="card shadow-sm h-100">
+          <div class="card-body">
+            <h3 class="h5 mb-3">{{ 'METRICS.DAILY_INCOME' | translate }}</h3>
+            <div class="bar-chart daily-chart">
+              @for (item of metricas.ingresosPorDia; track item.periodo) {
+                <div class="bar-column">
+                  <div class="bar-track" role="progressbar"
+                       [attr.aria-label]="('METRICS.DAY' | translate) + ' ' + item.periodo + ': ' + formatearMonto(item.total)"
+                       [attr.title]="formatearMonto(item.total)"
+                       [attr.aria-valuenow]="item.total"
+                       [attr.aria-valuemax]="maximoTotal(metricas.ingresosPorDia)"
+                       aria-valuemin="0"
+                       aria-orientation="vertical">
+                    <div class="bar-fill"
+                         [style.height.%]="porcentaje(item.total, maximoTotal(metricas.ingresosPorDia))"></div>
+                  </div>
+                  <span class="bar-label">{{ item.periodo }}</span>
+                  <span class="bar-count">{{ 'METRICS.PAYMENTS_COUNT' | translate:{ count: item.cantidadPagos } }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  }
+</section>

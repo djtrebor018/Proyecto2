@@ -1,0 +1,147 @@
+<main class="container py-4" aria-labelledby="admin-schedules-title">
+  <header class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+      <p class="text-success text-uppercase fw-semibold small mb-1">{{ 'ADMIN.TITLE' | translate }}</p>
+      <h1 id="admin-schedules-title" class="h3 mb-0">{{ 'ADMIN.SCHEDULES_TITLE' | translate }}</h1>
+    </div>
+    <button type="button" class="btn btn-success" (click)="iniciarCreacion()"
+            [disabled]="dias.length === 0 || accionEnCurso">
+      <i class="bi bi-calendar-plus me-2" aria-hidden="true"></i>{{ 'ADMIN.SCHEDULE_CREATE' | translate }}
+    </button>
+  </header>
+
+  @if (mensajeAccion) {
+    <div class="alert" [class.alert-success]="exito" [class.alert-danger]="!exito" role="status">
+      {{ mensajeAccion | translate }}
+    </div>
+  }
+
+  @if (formularioAbierto) {
+    <section class="card border-0 shadow-sm mb-4" aria-labelledby="schedule-form-title">
+      <div class="card-body p-3 p-md-4">
+        <h2 id="schedule-form-title" class="h5 fw-bold mb-3">
+          {{ (horarioEditando ? 'ADMIN.SCHEDULE_EDIT' : 'ADMIN.SCHEDULE_CREATE') | translate }}
+        </h2>
+        <form [formGroup]="horarioForm" (ngSubmit)="guardarHorario()" novalidate>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label for="schedule-day-1" class="form-label">{{ 'ADMIN.SCHEDULE_FIRST_DAY' | translate }}</label>
+              <select id="schedule-day-1" class="form-select" formControlName="Dia1">
+                <option [ngValue]="null" disabled>{{ 'COMMON.SELECT_OPTION' | translate }}</option>
+                @for (dia of dias; track dia.ID_Dia) {
+                  <option [ngValue]="dia.ID_Dia">{{ ('DAYS.' + dia.Dia.toUpperCase()) | translate }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-12 col-md-6">
+              <label for="schedule-day-2" class="form-label">{{ 'ADMIN.SCHEDULE_SECOND_DAY' | translate }}</label>
+              <select id="schedule-day-2" class="form-select" formControlName="Dia2">
+                <option [ngValue]="null" disabled>{{ 'COMMON.SELECT_OPTION' | translate }}</option>
+                @for (dia of dias; track dia.ID_Dia) {
+                  <option [ngValue]="dia.ID_Dia">{{ ('DAYS.' + dia.Dia.toUpperCase()) | translate }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+              <label for="schedule-start" class="form-label">{{ 'ADMIN.SCHEDULE_START_TIME' | translate }}</label>
+              <input id="schedule-start" class="form-control" type="time" formControlName="Hora_Inicio">
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+              <label for="schedule-end" class="form-label">{{ 'ADMIN.SCHEDULE_END_TIME' | translate }}</label>
+              <input id="schedule-end" class="form-control" type="time" formControlName="Hora_Fin">
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+              <label for="schedule-capacity" class="form-label">{{ 'ADMIN.SCHEDULE_CAPACITY' | translate }}</label>
+              <input id="schedule-capacity" class="form-control" type="number" min="1"
+                     formControlName="Cumpo_Maximo">
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+              <label for="schedule-status" class="form-label">{{ 'ADMIN.SCHEDULE_STATUS' | translate }}</label>
+              <select id="schedule-status" class="form-select" formControlName="Estado">
+                <option value="Disponible">{{ 'SCHEDULES.STATUS_AVAILABLE' | translate }}</option>
+                <option value="lleno">{{ 'SCHEDULES.STATUS_FULL' | translate }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="button" class="btn btn-outline-secondary" (click)="cancelarFormulario()">
+              {{ 'ADMIN.CANCEL' | translate }}
+            </button>
+            <button type="submit" class="btn btn-success" [disabled]="accionEnCurso">
+              {{ 'ADMIN.SAVE' | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  }
+
+  @if (loading) {
+    <p class="text-secondary" role="status">{{ 'ADMIN.SCHEDULES_LOADING' | translate }}</p>
+  } @else if (error) {
+    <div class="alert alert-danger d-flex flex-wrap justify-content-between align-items-center gap-2" role="alert">
+      <span>{{ 'ADMIN.SCHEDULES_ERROR' | translate }}</span>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="cargarHorarios()">
+        {{ 'ADMIN.RETRY' | translate }}
+      </button>
+    </div>
+  } @else if (horarios.length === 0) {
+    <p class="text-secondary">{{ 'ADMIN.SCHEDULES_EMPTY' | translate }}</p>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th scope="col">{{ 'ADMIN.NUMBER_SHORT' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.SCHEDULE_DAYS' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.SCHEDULE_HOURS' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.SCHEDULE_CAPACITY' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.SCHEDULE_STATUS' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.ACTIONS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (horario of horarios; track horario.ID_Horario) {
+            <tr>
+              <th scope="row">{{ horario.ID_Horario }}</th>
+              <td>{{ ('DAYS.' + horario.PrimerDia.Dia.toUpperCase()) | translate }} / {{ ('DAYS.' + horario.SegundoDia.Dia.toUpperCase()) | translate }}</td>
+              <td>{{ horario.Hora_Inicio }} – {{ horario.Hora_Fin }}</td>
+              <td>{{ horario.Cumpo_Maximo }}</td>
+              <td>
+                <span class="badge" [class.text-bg-success]="horario.Estado === 'Disponible'"
+                      [class.text-bg-secondary]="horario.Estado === 'lleno'">
+                  {{ (horario.Estado === 'Disponible' ? 'SCHEDULES.STATUS_AVAILABLE' : 'SCHEDULES.STATUS_FULL') | translate }}
+                </span>
+              </td>
+              <td class="text-nowrap">
+                <button type="button" class="btn btn-outline-primary btn-sm me-2"
+                        (click)="iniciarEdicion(horario)" [disabled]="accionEnCurso">
+                  {{ 'ADMIN.EDIT' | translate }}
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-sm"
+                        (click)="horarioPendienteEliminar = horario.ID_Horario" [disabled]="accionEnCurso">
+                  {{ 'ADMIN.DELETE' | translate }}
+                </button>
+              </td>
+            </tr>
+            @if (horarioPendienteEliminar === horario.ID_Horario) {
+              <tr>
+                <td colspan="6">
+                  <div class="alert alert-warning d-flex flex-wrap align-items-center justify-content-between gap-2 mb-0">
+                    <span>{{ 'ADMIN.SCHEDULE_DELETE_CONFIRM' | translate:{ id: horario.ID_Horario } }}</span>
+                    <span class="d-flex gap-2">
+                      <button type="button" class="btn btn-danger btn-sm" (click)="eliminarHorario(horario)"
+                              [disabled]="accionEnCurso">{{ 'ADMIN.DELETE' | translate }}</button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm"
+                              (click)="horarioPendienteEliminar = null">{{ 'ADMIN.CANCEL' | translate }}</button>
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</main>

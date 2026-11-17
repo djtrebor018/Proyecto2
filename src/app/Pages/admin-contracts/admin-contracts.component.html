@@ -1,0 +1,53 @@
+<main class="container py-4" aria-labelledby="admin-contracts-title">
+  <header class="mb-4">
+    <p class="text-success text-uppercase fw-semibold small mb-1">{{ 'ADMIN.TITLE' | translate }}</p>
+    <h1 id="admin-contracts-title" class="h3 mb-0">{{ 'ADMIN.CONTRACTS_TITLE' | translate }}</h1>
+  </header>
+
+  @if (loading) {
+    <p class="text-secondary" role="status">{{ 'ADMIN.CONTRACTS_LOADING' | translate }}</p>
+  } @else if (error) {
+    <div class="alert alert-danger d-flex flex-wrap justify-content-between align-items-center gap-2" role="alert">
+      <span>{{ 'ADMIN.CONTRACTS_ERROR' | translate }}</span>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="cargarContratos()">
+        {{ 'ADMIN.RETRY' | translate }}
+      </button>
+    </div>
+  } @else if (contratos.length === 0) {
+    <p class="text-secondary">{{ 'ADMIN.CONTRACTS_EMPTY' | translate }}</p>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th scope="col">{{ 'ADMIN.NUMBER_SHORT' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.NUMBER_SHORT' | translate }}</th>
+            <th scope="col">{{ 'COMMON.NAME' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.SCHEDULE' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.CONTRACT_START' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.CONTRACT_END' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.CONTRACT_STATUS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (contrato of contratos; track contrato.ID_Contrato) {
+            <tr>
+              <th scope="row">{{ contrato.ID_Contrato }}</th>
+              <td>{{ contrato.ID_Inscripcion }}</td>
+              <td>{{ nombreUsuario(contrato.Inscripcion?.ID_Usuario) }}</td>
+              <td>{{ horarioDelContrato(contrato.ID_Inscripcion) }}</td>
+              <td>{{ contrato.Fecha_Inicio }}</td>
+              <td>{{ contrato.Fecha_Fin || '—' }}</td>
+              <td>
+                <span class="badge" [class.text-bg-success]="contrato.Estado === 'Vigente'"
+                      [class.text-bg-secondary]="contrato.Estado === 'Cancelado'">
+                  {{ (contrato.Estado === 'Vigente' ? 'CONTRACTS.STATUS_ACTIVE' : 'CONTRACTS.STATUS_CANCELLED') | translate }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</main>

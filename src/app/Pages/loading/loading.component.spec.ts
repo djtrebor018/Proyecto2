@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { LoadingComponent } from './loading.component';
 
@@ -8,7 +9,7 @@ describe('LoadingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LoadingComponent]
+      imports: [LoadingComponent, TranslateModule.forRoot()]
     })
     .compileComponents();
     

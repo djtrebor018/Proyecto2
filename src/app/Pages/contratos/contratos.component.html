@@ -1,1 +1,104 @@
-<p>contratos works!</p>
+<main class="contracts-page container py-4 py-lg-5">
+  <header class="contracts-hero rounded-4 p-4 p-md-5 mb-4">
+    <p class="contracts-eyebrow mb-2">{{ 'CONTRACTS.EYEBROW' | translate }}</p>
+    <h1 class="display-6 fw-bold mb-2">{{ 'CONTRACTS.TITLE' | translate }}</h1>
+    <p class="lead mb-0">{{ 'CONTRACTS.DESCRIPTION' | translate }}</p>
+  </header>
+
+  <section aria-labelledby="contract-list-title">
+    <h2 id="contract-list-title" class="h3 fw-bold mb-3">{{ 'CONTRACTS.YOUR_CONTRACTS' | translate }}</h2>
+
+    @if (loading) {
+      <div class="contracts-message" role="status">
+        <span class="spinner-border spinner-border-sm text-success" aria-hidden="true"></span>
+        <span>{{ 'CONTRACTS.LOADING' | translate }}</span>
+      </div>
+    } @else if (errorMessage) {
+      <div class="alert alert-danger" role="alert">{{ errorMessage | translate }}</div>
+    } @else if (contratos.length === 0) {
+      <div class="contracts-message">
+        <i class="bi bi-file-earmark-x" aria-hidden="true"></i>
+        <p class="mb-0">{{ 'CONTRACTS.EMPTY' | translate }}</p>
+      </div>
+    } @else {
+      <div class="d-grid gap-3">
+        @for (contrato of contratos; track contrato.ID_Contrato) {
+          <article class="contract-card card border-0 shadow-sm">
+            <div class="card-header contract-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+              <h3 class="h5 fw-bold mb-0">
+                {{ 'CONTRACTS.NUMBER' | translate:{ id: contrato.ID_Contrato } }}
+              </h3>
+              <span class="badge rounded-pill"
+                    [class.text-bg-success]="contrato.Estado === 'Vigente'"
+                    [class.text-bg-secondary]="contrato.Estado === 'Cancelado'">
+                {{ (contrato.Estado === 'Vigente' ? 'CONTRACTS.STATUS_ACTIVE' : 'CONTRACTS.STATUS_CANCELLED') | translate }}
+              </span>
+            </div>
+            <div class="card-body p-3 p-md-4">
+              <h4 class="h6 fw-bold mb-3">{{ 'CONTRACTS.DATABASE_DETAILS' | translate }}</h4>
+              <dl class="contract-details row g-3 mb-0">
+                <div class="col-12 col-sm-6 col-lg-4">
+                  <dt>{{ 'CONTRACTS.ENROLLMENT_ID' | translate }}</dt>
+                  <dd>{{ contrato.ID_Inscripcion }}</dd>
+                </div>
+                @if (contrato.Inscripcion; as inscripcion) {
+                  <div class="col-12 col-sm-6 col-lg-4">
+                    <dt>{{ 'CONTRACTS.USER_ID' | translate }}</dt>
+                    <dd>{{ nombreUsuario }}</dd>
+                  </div>
+                  <div class="col-12 col-sm-6 col-lg-4">
+                    <dt>{{ 'CONTRACTS.SCHEDULE_ID' | translate }}</dt>
+                    <dd>
+                      @if (horarioPorId(inscripcion.ID_Horario); as horario) {
+                        {{ ('DAYS.' + horario.PrimerDia.Dia.toUpperCase()) | translate }}
+                        /
+                        {{ ('DAYS.' + horario.SegundoDia.Dia.toUpperCase()) | translate }},
+                        {{ horario.Hora_Inicio.slice(0, 5) }} – {{ horario.Hora_Fin.slice(0, 5) }}
+                      } @else {
+                        —
+                      }
+                    </dd>
+                  </div>
+                  <div class="col-12 col-sm-6 col-lg-4">
+                    <dt>{{ 'CONTRACTS.ENROLLMENT_DATE' | translate }}</dt>
+                    <dd>{{ inscripcion.Fecha }}</dd>
+                  </div>
+                }
+                <div class="col-12 col-sm-6 col-lg-4">
+                  <dt>{{ 'CONTRACTS.START_DATE' | translate }}</dt>
+                  <dd>{{ contrato.Fecha_Inicio }}</dd>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4">
+                  <dt>{{ 'CONTRACTS.END_DATE' | translate }}</dt>
+                  <dd>{{ contrato.Fecha_Fin || ('CONTRACTS.NO_END_DATE' | translate) }}</dd>
+                </div>
+              </dl>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+
+  <section class="pool-rules card border-0 shadow-sm mt-4" aria-labelledby="pool-rules-title">
+    <div class="card-header pool-rules-header">
+      <p class="contracts-eyebrow mb-1">{{ 'CONTRACTS.POOL_EYEBROW' | translate }}</p>
+      <h2 id="pool-rules-title" class="h3 fw-bold mb-0">{{ 'CONTRACTS.POOL_RULES_TITLE' | translate }}</h2>
+    </div>
+    <div class="card-body p-3 p-md-4">
+      <p class="text-secondary">{{ 'CONTRACTS.POOL_RULES_INTRO' | translate }}</p>
+      <ol class="pool-rules-list">
+        <li>{{ 'CONTRACTS.POOL_RULES.SHOWER' | translate }}</li>
+        <li>{{ 'CONTRACTS.POOL_RULES.SWIMWEAR' | translate }}</li>
+        <li>{{ 'CONTRACTS.POOL_RULES.FOOD_AND_GLASS' | translate }}</li>
+        <li>{{ 'CONTRACTS.POOL_RULES.FOLLOW_STAFF' | translate }}</li>
+        <li>{{ 'CONTRACTS.POOL_RULES.PAYMENT_DUE' | translate }}</li>
+      </ol>
+
+      <div class="liability-notice rounded-3 p-3 p-md-4 mt-4">
+        <h3 class="h5 fw-bold">{{ 'CONTRACTS.RESPONSIBILITY_TITLE' | translate }}</h3>
+        <p class="mb-0">{{ 'CONTRACTS.RESPONSIBILITY_TEXT' | translate }}</p>
+      </div>
+    </div>
+  </section>
+</main>

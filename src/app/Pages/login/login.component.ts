@@ -3,11 +3,13 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServicesService } from '../../Services/auth-services.service';
 import { Router, RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslateModule, LanguageSwitcherComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -42,7 +44,7 @@ onSubmit(): void {
       error: (err) => {
     
        
-       this.errorMessage = err.error?.msg || 'Ocurrió un error al iniciar sesión.';
+       this.errorMessage = err.error?.msg || 'ERRORS.LOGIN';
        console.error('Login error:', err.error.msg);
     
   }

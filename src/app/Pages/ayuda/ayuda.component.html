@@ -1,0 +1,159 @@
+<main class="help-page container py-4 py-lg-5">
+  <section class="help-hero rounded-4 p-4 p-md-5 mb-4">
+    <div class="help-hero-icon" aria-hidden="true">
+      <i class="bi bi-signpost-split"></i>
+    </div>
+    <p class="help-eyebrow mb-2">{{ 'HELP.EYEBROW' | translate }}</p>
+    <h1 class="display-6 fw-bold mb-2">{{ 'HELP.TITLE' | translate }}</h1>
+    <p class="lead mb-0">{{ 'HELP.INTRO' | translate }}</p>
+  </section>
+
+  <section class="guided-help mb-5" aria-labelledby="guided-help-title">
+    <div class="d-flex align-items-start gap-3 mb-3">
+      <span class="guided-help-icon" aria-hidden="true"><i class="bi bi-signpost-2"></i></span>
+      <div>
+        <h2 id="guided-help-title" class="h3 fw-bold mb-1">{{ 'HELP.GUIDED_TITLE' | translate }}</h2>
+        <p class="text-secondary mb-0">{{ 'HELP.GUIDED_DESCRIPTION' | translate }}</p>
+      </div>
+    </div>
+
+    @if (guiaSeleccionada; as guia) {
+      <article class="guide-card card border-0 shadow-sm" aria-live="polite">
+        <div class="card-body p-3 p-md-4">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <button type="button" class="btn btn-link p-0 text-success text-decoration-none"
+                    (click)="volverAGuias()">
+              <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>{{ 'HELP.BACK_TO_GUIDES' | translate }}
+            </button>
+            <span class="badge rounded-pill text-bg-light">
+              {{ 'HELP.STEP_COUNTER' | translate:{ current: pasoActual + 1, total: guia.steps.length } }}
+            </span>
+          </div>
+
+          <div class="d-flex align-items-center gap-3 mb-4">
+            <span class="guide-choice-icon" aria-hidden="true"><i [class]="'bi ' + guia.icon"></i></span>
+            <div>
+              <h3 class="h5 fw-bold mb-1">{{ guia.titleKey | translate }}</h3>
+              <p class="small text-secondary mb-0">{{ guia.descriptionKey | translate }}</p>
+            </div>
+          </div>
+
+          <div class="progress mb-4" role="progressbar"
+               [attr.aria-label]="'HELP.PROGRESS' | translate"
+               [attr.aria-valuenow]="progresoGuia" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-success" [style.width.%]="progresoGuia"></div>
+          </div>
+
+          @if (pasoGuiaActual; as paso) {
+            <div class="guide-step p-3 p-md-4 mb-4">
+              <p class="guide-step-label mb-2">
+                {{ 'HELP.STEP_LABEL' | translate:{ number: pasoActual + 1 } }}
+              </p>
+              <h3 class="h4 fw-bold">{{ paso.titleKey | translate }}</h3>
+              <p class="mb-0 text-secondary">{{ paso.descriptionKey | translate }}</p>
+            </div>
+          }
+
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <button type="button" class="btn btn-outline-secondary" (click)="pasoAnterior()"
+                    [disabled]="pasoActual === 0">
+              <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>{{ 'HELP.PREVIOUS' | translate }}
+            </button>
+            <div class="d-flex flex-wrap gap-2 ms-auto">
+              @if (pasoActual < guia.steps.length - 1) {
+                <button type="button" class="btn btn-success" (click)="siguientePaso()">
+                  {{ 'HELP.NEXT' | translate }}<i class="bi bi-arrow-right ms-2" aria-hidden="true"></i>
+                </button>
+              } @else {
+                <button type="button" class="btn btn-outline-success" (click)="volverAGuias()">
+                  {{ 'HELP.FINISH_GUIDE' | translate }}
+                </button>
+                <a class="btn btn-success" [routerLink]="guia.route">
+                  {{ guia.actionKey | translate }}<i class="bi bi-arrow-right ms-2" aria-hidden="true"></i>
+                </a>
+              }
+            </div>
+          </div>
+        </div>
+      </article>
+    } @else {
+      <div class="row g-3">
+        @for (guia of guiasFiltradas; track guia.id) {
+          <div class="col-12 col-md-6">
+            <button type="button" class="guide-choice card h-100 w-100 text-start border-0 shadow-sm"
+                    (click)="iniciarGuia(guia)">
+              <span class="card-body d-flex align-items-start gap-3 p-3 p-md-4">
+                <span class="guide-choice-icon" aria-hidden="true"><i [class]="'bi ' + guia.icon"></i></span>
+                <span>
+                  <span class="d-block fw-bold text-dark mb-1">{{ guia.titleKey | translate }}</span>
+                  <span class="d-block small text-secondary">{{ guia.descriptionKey | translate }}</span>
+                  <span class="d-inline-block small fw-semibold text-success mt-3">
+                    {{ 'HELP.START_GUIDE' | translate }}<i class="bi bi-arrow-right ms-2" aria-hidden="true"></i>
+                  </span>
+                </span>
+              </span>
+            </button>
+          </div>
+        } @empty {
+          <div class="col-12">
+            <div class="alert alert-light border mb-0" role="status">{{ 'HELP.NO_GUIDES' | translate }}</div>
+          </div>
+        }
+      </div>
+    }
+  </section>
+
+  <section class="help-faq" aria-labelledby="help-faq-title">
+    <h2 id="help-faq-title" class="h3 fw-bold mb-3">{{ 'HELP.FAQ_TITLE' | translate }}</h2>
+    <section class="help-search card border-0 shadow-sm mb-4" aria-labelledby="help-search-title">
+      <div class="card-body p-3 p-md-4">
+        <label id="help-search-title" for="help-search-input" class="form-label fw-semibold">
+          {{ 'HELP.SEARCH_LABEL' | translate }}
+        </label>
+        <div class="input-group">
+          <span class="input-group-text bg-white" aria-hidden="true"><i class="bi bi-search"></i></span>
+          <input id="help-search-input" class="form-control" type="search"
+                 [placeholder]="'HELP.SEARCH_PLACEHOLDER' | translate"
+                 [value]="busqueda" (input)="actualizarBusqueda($event)">
+        </div>
+      </div>
+    </section>
+
+    @for (tema of temasFiltrados; track tema.titleKey) {
+      <section class="help-topic mb-4" [attr.aria-label]="tema.titleKey | translate">
+        <h2 class="h4 fw-bold mb-3">{{ tema.titleKey | translate }}</h2>
+        <div class="d-grid gap-2">
+          @for (pregunta of tema.questions; track pregunta.questionKey) {
+            <details class="help-question card border-0 shadow-sm">
+              <summary class="card-body fw-semibold">{{ pregunta.questionKey | translate }}</summary>
+              <div class="help-answer px-3 px-md-4 pb-3">
+                <p class="mb-0">{{ pregunta.answerKey | translate }}</p>
+              </div>
+            </details>
+          }
+        </div>
+      </section>
+    } @empty {
+      <div class="alert alert-light border text-center py-4" role="status">
+        <i class="bi bi-search me-2" aria-hidden="true"></i>{{ 'HELP.NO_RESULTS' | translate }}
+      </div>
+    }
+  </section>
+
+  <section class="help-links card border-0 shadow-sm mt-4">
+    <div class="card-body p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+      <div>
+        <h2 class="h5 fw-bold mb-1">{{ 'HELP.QUICK_LINKS_TITLE' | translate }}</h2>
+        <p class="text-secondary mb-0">{{ 'HELP.QUICK_LINKS_DESCRIPTION' | translate }}</p>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-success" routerLink="/horario">
+          <i class="bi bi-calendar-week me-2" aria-hidden="true"></i>{{ 'NAV.SCHEDULES' | translate }}
+        </a>
+        <a class="btn btn-outline-success" routerLink="/facturacion">
+          <i class="bi bi-credit-card me-2" aria-hidden="true"></i>{{ 'NAV.PAYMENTS' | translate }}
+        </a>
+      </div>
+    </div>
+  </section>
+</main>

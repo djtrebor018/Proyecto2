@@ -5,17 +5,23 @@ import { AdminNavbarComponent } from '../admin-navbar/admin-navbar.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { RouterOutlet } from '@angular/router';
 import { BienvenidoComponent } from '../bienvenido/bienvenido.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { AdminMetricsComponent } from '../admin-metrics/admin-metrics.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [LoadingComponent, AdminNavbarComponent, RouterOutlet, BienvenidoComponent],
+  imports: [LoadingComponent, AdminNavbarComponent, AdminMetricsComponent, NavbarComponent, RouterOutlet, BienvenidoComponent, TranslateModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
   loading:boolean = true
-  Rol:any
+  Rol: string = ''
   Nombre:any
+
+  get esAdmin(): boolean {
+    return String(this.Rol ?? '').trim().toLowerCase() === 'admin';
+  }
 
   constructor(private api:AuthServicesService){
 

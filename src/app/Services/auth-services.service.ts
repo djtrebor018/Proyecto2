@@ -3,6 +3,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ILogin, loginResponse } from '../models/login.model';
 import { Observable, tap } from 'rxjs';
 import { Usuario } from '../models/user.model';
+
+export interface DatosUsuarioResponse {
+  dataUser: Pick<Usuario, 'Nombre' | 'Rol' | 'Tipo_Usuario'>;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -23,12 +28,12 @@ export class AuthServicesService {
   getToken():string | null{
    return localStorage.getItem('token')
   }
-  cargarDatos(){
+  cargarDatos(): Observable<DatosUsuarioResponse> {
     const token = this.getToken();
   const headers = new HttpHeaders({
      'token': token || ''
   });
-  return this._httpclient.get(`${this.baseUrl}`, { headers });
+  return this._httpclient.get<DatosUsuarioResponse>(`${this.baseUrl}`, { headers });
 }
 
 Logout(){

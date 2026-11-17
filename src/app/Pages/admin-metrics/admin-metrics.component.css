@@ -1,0 +1,78 @@
+.metric-card {
+  border: 0;
+  border-top: 4px solid #198754;
+}
+
+.metric-total {
+  color: #146c43;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+}
+
+.bar-chart {
+  display: grid;
+  grid-auto-columns: minmax(2.25rem, 1fr);
+  grid-auto-flow: column;
+  align-items: end;
+  gap: 0.5rem;
+  min-height: 18rem;
+  overflow-x: auto;
+  padding: 0.5rem 0 0.25rem;
+}
+
+.monthly-chart {
+  grid-auto-columns: minmax(2.5rem, 1fr);
+}
+
+.bar-column {
+  display: flex;
+  min-width: 0;
+  height: 17rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+.bar-track {
+  display: flex;
+  width: min(100%, 1.15rem);
+  height: 12rem;
+  align-items: flex-end;
+  overflow: hidden;
+  border-radius: 0.25rem 0.25rem 0 0;
+  background-color: #e9ecef;
+}
+
+.bar-fill {
+  width: 100%;
+  min-height: 0;
+  background-color: #198754;
+  transition: height 200ms ease;
+}
+
+.bar-label {
+  color: #495057;
+  font-size: 0.75rem;
+}
+
+.bar-count {
+  color: #6c757d;
+  font-size: 0.65rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.daily-chart .bar-column {
+  min-width: 2.25rem;
+}
+
+.monthly-chart .bar-column {
+  min-width: 2.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-fill {
+    transition: none;
+  }
+}

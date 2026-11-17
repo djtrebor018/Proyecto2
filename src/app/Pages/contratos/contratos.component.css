@@ -1,0 +1,82 @@
+.contracts-page {
+  max-width: 1040px;
+}
+
+.contracts-hero {
+  background: linear-gradient(135deg, #146c43, #198754);
+  color: #fff;
+}
+
+.contracts-eyebrow {
+  color: #f3d45c;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.contracts-hero .lead {
+  max-width: 650px;
+}
+
+.contract-header,
+.pool-rules-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+  background: #f8faf9;
+}
+
+.contract-details dt {
+  margin-bottom: 0.25rem;
+  color: #66716b;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.contract-details dd {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.contracts-message {
+  display: flex;
+  min-height: 120px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid #e5e9e6;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #66716b;
+  text-align: center;
+}
+
+.contracts-message > i {
+  font-size: 1.5rem;
+}
+
+.pool-rules-list {
+  display: grid;
+  gap: 0.85rem;
+  padding-left: 1.4rem;
+}
+
+.pool-rules-list li {
+  padding-left: 0.35rem;
+}
+
+.pool-rules-list li::marker {
+  color: #198754;
+  font-weight: 700;
+}
+
+.liability-notice {
+  border-left: 4px solid #198754;
+  background: #f4f8f5;
+}
+
+.liability-notice p {
+  color: #59645d;
+  line-height: 1.65;
+}

@@ -1,0 +1,11 @@
+<label class="language-switcher d-flex align-items-center gap-2 me-3 mb-2 mb-lg-0"
+       [class.language-switcher-login]="appearance === 'login'">
+  <i class="bi bi-globe2" aria-hidden="true"></i>
+  <span class="visually-hidden">{{ 'LANGUAGE.SELECT' | translate }}</span>
+  <select class="form-select form-select-sm language-select"
+          [value]="idioma" (change)="cambiarIdioma($event)"
+          [attr.aria-label]="'LANGUAGE.SELECT' | translate">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+  </select>
+</label>

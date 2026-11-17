@@ -14,7 +14,7 @@ export class PagosComponent implements OnInit {
 
  constructor(private _route: ActivatedRoute) { }
  id:string='';
- Monto: number = 1500;
+ Monto: number = 1750;
  Metodo_Pago: string = '';
  ngOnInit(): void {
   this._route.params.subscribe({

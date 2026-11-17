@@ -1,22 +1,37 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg bg-success">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Admin</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand" routerLink="/dashboard" routerLinkActive="active">
+      <img src="assets/Logo.jpeg" alt="Logo" width="45" height="45" class="me-2 rounded-circle">{{ 'ADMIN.TITLE' | translate }}
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbarContent" aria-controls="adminNavbarContent" aria-expanded="false" [attr.aria-label]="'COMMON.TOGGLE_NAV' | translate">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse" id="adminNavbarContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">{{ 'NAV.DASHBOARD' | translate }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+          <a class="nav-link" routerLink="/admin/usuarios" routerLinkActive="active">{{ 'ADMIN.USERS' | translate }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin/inscripciones" routerLinkActive="active">{{ 'ADMIN.ENROLLMENTS' | translate }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin/horarios" routerLinkActive="active">{{ 'ADMIN.SCHEDULES' | translate }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin/pagos" routerLinkActive="active">{{ 'ADMIN.PAYMENTS' | translate }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin/contratos" routerLinkActive="active">{{ 'ADMIN.CONTRACTS' | translate }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin/backup" routerLinkActive="active">{{ 'ADMIN.BACKUP' | translate }}</a>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      <app-language-switcher></app-language-switcher>
+      <button type="button" class="btn btn-danger" (click)="salir()">{{ 'NAV.LOGOUT' | translate }}</button>
     </div>
   </div>
 </nav>

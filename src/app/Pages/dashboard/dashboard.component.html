@@ -1,10 +1,16 @@
 @if (loading) {
   <app-loading></app-loading>
 } @else {
-  @if (Rol === 'Admin') {
+  @if (esAdmin) {
     <app-admin-navbar></app-admin-navbar>
-  } 
+  } @else {
+    <app-navbar></app-navbar>
+  }
   <router-outlet />
 }
 
-<app-bienvenido [Nombre]="Nombre"></app-bienvenido>
+@if (!loading && esAdmin) {
+  <app-admin-metrics></app-admin-metrics>
+} @else if (!loading) {
+  <app-bienvenido [Nombre]="Nombre"></app-bienvenido>
+}

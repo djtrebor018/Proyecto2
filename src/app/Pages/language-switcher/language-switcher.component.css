@@ -1,0 +1,36 @@
+:host {
+  display: inline-block;
+}
+
+.language-switcher {
+  color: #E0B300;
+}
+
+.language-select {
+  width: auto;
+  min-width: 105px;
+  color: #ffffff;
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+}
+
+.language-select option {
+  color: #212529;
+}
+
+.language-switcher-login {
+  color: #495057;
+  margin: 0;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.16);
+}
+
+.language-switcher-login .language-select {
+  color: #212529;
+  background-color: #ffffff;
+  border-color: #ced4da;
+}

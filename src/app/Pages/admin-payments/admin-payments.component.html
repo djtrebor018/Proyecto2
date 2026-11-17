@@ -1,0 +1,203 @@
+<main class="container py-4" aria-labelledby="admin-payments-title">
+  <header class="mb-4">
+    <p class="text-success text-uppercase fw-semibold small mb-1">{{ 'ADMIN.TITLE' | translate }}</p>
+    <h1 id="admin-payments-title" class="h3 mb-0">{{ 'ADMIN.PAYMENTS_TITLE' | translate }}</h1>
+  </header>
+
+  <section class="card border-0 shadow-sm mb-4" aria-labelledby="cashier-title">
+    <div class="card-body p-3 p-md-4">
+      <p class="text-success text-uppercase fw-semibold small mb-1">{{ 'ADMIN.CASHIER_EYEBROW' | translate }}</p>
+      <h2 id="cashier-title" class="h4 fw-bold">{{ 'ADMIN.CASHIER_TITLE' | translate }}</h2>
+      <p class="text-secondary">{{ 'ADMIN.CASHIER_DESCRIPTION' | translate }}</p>
+
+      @if (pagoExitoso) {
+        <div class="alert alert-success" role="status">{{ 'ADMIN.CASHIER_PAYMENT_SUCCESS' | translate }}</div>
+      }
+
+      @if (!usuarioEncontrado) {
+        <form [formGroup]="busquedaForm" (ngSubmit)="buscarUsuario()" novalidate>
+          <div class="row g-3 align-items-end">
+            <div class="col-12 col-md-4">
+              <label for="cashier-user-type" class="form-label">{{ 'REGISTER.USER_TYPE' | translate }}</label>
+              <select id="cashier-user-type" class="form-select" formControlName="Tipo_Usuario">
+                <option value="Estudiante">{{ 'USER_TYPES.STUDENT' | translate }}</option>
+                <option value="Maestro">{{ 'USER_TYPES.TEACHER' | translate }}</option>
+                <option value="Externo">{{ 'USER_TYPES.EXTERNAL' | translate }}</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-5">
+              <label for="cashier-identification" class="form-label">{{ identificacionLabelKey | translate }}</label>
+              <input id="cashier-identification" class="form-control" [formControl]="identificacionControl"
+                     [placeholder]="identificacionFormatKey | translate"
+                     [maxlength]="busquedaForm.controls.Tipo_Usuario.value === 'Externo' ? 20 : 9">
+              @if (identificacionControl.invalid && identificacionControl.touched) {
+                <small class="text-danger">
+                  {{ (busquedaForm.controls.Tipo_Usuario.value === 'Externo' ? 'ADMIN.FIELD_REQUIRED' : 'ADMIN.INVALID_STUDENT_ID') | translate }}
+                </small>
+              }
+            </div>
+            <div class="col-12 col-md-3">
+              <button type="submit" class="btn btn-success w-100" [disabled]="buscandoUsuario">
+                @if (buscandoUsuario) {
+                  <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                  {{ 'COMMON.LOADING' | translate }}
+                } @else {
+                  <i class="bi bi-search me-2" aria-hidden="true"></i>{{ 'ADMIN.CASHIER_FIND_USER' | translate }}
+                }
+              </button>
+            </div>
+          </div>
+        </form>
+
+        @if (busquedaError) {
+          <div class="alert alert-danger mt-3 mb-0" role="alert">{{ busquedaError | translate }}</div>
+        }
+      } @else {
+        <div class="bg-light border rounded-3 p-3 mb-3">
+          <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+            <div>
+              <p class="text-secondary small mb-1">{{ 'ADMIN.CASHIER_USER_FOUND' | translate }}</p>
+              <h3 class="h5 fw-bold mb-1">{{ usuarioEncontrado.Nombre }}</h3>
+              <p class="mb-0">
+                {{ ('USER_TYPES.' + usuarioEncontrado.Tipo_Usuario.toUpperCase()) | translate }}
+                · {{ usuarioEncontrado.Matricula || usuarioEncontrado.Cedula }}
+              </p>
+            </div>
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelarBusqueda()">
+              {{ 'ADMIN.CASHIER_CHANGE_USER' | translate }}
+            </button>
+          </div>
+        </div>
+
+        <form [formGroup]="pagoCajaForm" (ngSubmit)="registrarPago()" novalidate>
+          @if (inscripciones.length === 0) {
+            <div class="alert alert-info" role="status">
+              <span>{{ 'ADMIN.CASHIER_NO_ENROLLMENTS' | translate }}</span>
+              <span class="fw-semibold ms-1">{{ 'ADMIN.PAYMENT_REASON_ENROLLMENT' | translate }}
+                · {{ formatearMonto(pagoCajaForm.controls.Monto.value ?? 1750) }}</span>
+            </div>
+          }
+          <div class="row g-3">
+            @if (inscripciones.length === 0) {
+              <div class="col-12 col-lg-6">
+                <label for="cashier-new-schedule" class="form-label">{{ 'ADMIN.SCHEDULE' | translate }}</label>
+                <select id="cashier-new-schedule" class="form-select" formControlName="ID_Horario">
+                  <option [ngValue]="null" disabled>{{ 'COMMON.SELECT_OPTION' | translate }}</option>
+                  @for (horario of horariosDisponibles; track horario.ID_Horario) {
+                    <option [ngValue]="horario.ID_Horario">{{ nombreHorario(horario) }}</option>
+                  }
+                </select>
+                @if (cargandoHorarios) {
+                  <small class="text-secondary">{{ 'ADMIN.SCHEDULES_LOADING' | translate }}</small>
+                } @else if (errorHorarios) {
+                  <small class="text-danger">{{ errorHorarios | translate }}</small>
+                } @else if (horariosDisponibles.length === 0) {
+                  <small class="text-danger">{{ 'ADMIN.SCHEDULES_EMPTY' | translate }}</small>
+                }
+                @if (pagoCajaForm.controls.ID_Horario.touched && pagoCajaForm.controls.ID_Horario.value === null) {
+                  <small class="text-danger">{{ 'ADMIN.SCHEDULE_REQUIRED' | translate }}</small>
+                }
+              </div>
+            } @else {
+              <div class="col-12 col-lg-6">
+                <label for="cashier-enrollment" class="form-label">{{ 'ADMIN.SCHEDULE' | translate }}</label>
+                <select id="cashier-enrollment" class="form-select" formControlName="ID_Inscripcion">
+                  <option [ngValue]="null" disabled>{{ 'COMMON.SELECT_OPTION' | translate }}</option>
+                  @for (inscripcion of inscripciones; track inscripcion.ID_Inscripcion) {
+                    <option [ngValue]="inscripcion.ID_Inscripcion">{{ nombreInscripcion(inscripcion) }}</option>
+                  }
+                </select>
+              </div>
+            }
+            <div class="col-12 col-md-6 col-lg-3">
+              <label for="cashier-payment-reason" class="form-label">{{ 'ADMIN.PAYMENT_REASON' | translate }}</label>
+              <select id="cashier-payment-reason" class="form-select" formControlName="Motivo_Pago">
+                @if (inscripciones.length === 0) {
+                  <option value="Inscripción">{{ 'ADMIN.PAYMENT_REASON_ENROLLMENT' | translate }}</option>
+                } @else {
+                  <option value="Mensual">{{ 'ADMIN.PAYMENT_REASON_MONTHLY' | translate }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+              <label for="cashier-payment-method" class="form-label">{{ 'ADMIN.PAYMENT_METHOD' | translate }}</label>
+              <select id="cashier-payment-method" class="form-select" formControlName="Metodo_Pago">
+                <option value="Efectivo">{{ 'ADMIN.PAYMENT_METHOD_CASH' | translate }}</option>
+                <option value="Transferencia">{{ 'ADMIN.PAYMENT_METHOD_TRANSFER' | translate }}</option>
+                <option value="Tarjeta">{{ 'ADMIN.PAYMENT_METHOD_CARD' | translate }}</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+              <label for="cashier-payment-amount" class="form-label">{{ 'ADMIN.PAYMENT_AMOUNT' | translate }}</label>
+              <input id="cashier-payment-amount" class="form-control" type="number" min="0.01" max="99999999.99"
+                     step="0.01" formControlName="Monto">
+            </div>
+          </div>
+          @if (pagoError) {
+            <div class="alert alert-danger mt-3 mb-0" role="alert">{{ pagoError | translate }}</div>
+          }
+          <div class="d-flex justify-content-end mt-3">
+            <button type="submit" class="btn btn-success" [disabled]="registrandoPago || cargandoHorarios">
+              @if (registrandoPago) {
+                <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                {{ 'PAYMENT.PROCESSING' | translate }}
+              } @else {
+                <i class="bi bi-cash-coin me-2" aria-hidden="true"></i>{{ 'ADMIN.CASHIER_REGISTER_PAYMENT' | translate }}
+              }
+            </button>
+          </div>
+        </form>
+      }
+    </div>
+  </section>
+
+  <section aria-labelledby="payment-list-title">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+      <h2 id="payment-list-title" class="h4 fw-bold mb-0">{{ 'ADMIN.PAYMENTS_REGISTERED' | translate }}</h2>
+      <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cargarPagos()" [disabled]="loading">
+        {{ 'ADMIN.RETRY' | translate }}
+      </button>
+    </div>
+
+  @if (loading) {
+    <p class="text-secondary" role="status">{{ 'ADMIN.PAYMENTS_LOADING' | translate }}</p>
+  } @else if (error) {
+    <div class="alert alert-danger d-flex flex-wrap justify-content-between align-items-center gap-2" role="alert">
+      <span>{{ 'ADMIN.PAYMENTS_ERROR' | translate }}</span>
+    </div>
+  } @else if (pagos.length === 0) {
+    <p class="text-secondary">{{ 'ADMIN.PAYMENTS_EMPTY' | translate }}</p>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th scope="col">{{ 'ADMIN.NUMBER_SHORT' | translate }}</th>
+            <th scope="col">{{ 'COMMON.NAME' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.SCHEDULE' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.PAYMENT_DATE' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.PAYMENT_REASON' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.PAYMENT_METHOD' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.PAYMENT_AMOUNT' | translate }}</th>
+            <th scope="col">{{ 'ADMIN.PAYMENT_STATUS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (pago of pagos; track pago.ID_Pago) {
+            <tr>
+              <th scope="row">{{ pago.ID_Pago }}</th>
+              <td>{{ nombreUsuario(pago.Inscripcion?.ID_Usuario) }}</td>
+              <td>{{ horarioDelPago(pago) }}</td>
+              <td>{{ pago.Fecha_Pago }}</td>
+              <td>{{ pago.Motivo_Pago }}</td>
+              <td>{{ pago.Metodo_Pago }}</td>
+              <td>{{ formatearMonto(pago.Monto) }}</td>
+              <td>{{ pago.Estado }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  </section>
+</main>

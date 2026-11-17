@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable,map } from 'rxjs';
-import { Horario, HorarioByIdResponse, HorariosResponse } from '../models/horario.model';
+import { DiaHorario, Horario, HorarioByIdResponse, HorarioPayload, HorariosResponse } from '../models/horario.model';
 import { AuthServicesService } from './auth-services.service';
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,7 @@ import { AuthServicesService } from './auth-services.service';
 export class HorarioService {
 
 private baseUrl = 'http://localhost:8000/Api/Horarios'
+private readonly diasUrl = 'http://localhost:8000/Api/Dias';
 
   constructor(
     private _httpclient:HttpClient,
@@ -34,5 +35,33 @@ private baseUrl = 'http://localhost:8000/Api/Horarios'
          'token': token || ''
       });
    return this._httpclient.get<HorarioByIdResponse>(`${this.baseUrl}/${id}`,{headers}).pipe(map((res) => res.HorarioById));
+  }
+
+  getDias(): Observable<{ msg: string; dias: DiaHorario[] }> {
+    return this._httpclient.get<{ msg: string; dias: DiaHorario[] }>(this.diasUrl, {
+      headers: this.authHeaders()
+    });
+  }
+
+  crearHorario(datos: HorarioPayload): Observable<{ msg: string }> {
+    return this._httpclient.post<{ msg: string }>(this.baseUrl, datos, {
+      headers: this.authHeaders()
+    });
+  }
+
+  actualizarHorario(id: number, datos: HorarioPayload): Observable<{ msg: string }> {
+    return this._httpclient.patch<{ msg: string }>(`${this.baseUrl}/${id}`, datos, {
+      headers: this.authHeaders()
+    });
+  }
+
+  eliminarHorario(id: number): Observable<{ msg: string }> {
+    return this._httpclient.delete<{ msg: string }>(`${this.baseUrl}/${id}`, {
+      headers: this.authHeaders()
+    });
+  }
+
+  private authHeaders(): HttpHeaders {
+    return new HttpHeaders({ token: this._api.getToken() ?? '' });
   }
 }

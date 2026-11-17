@@ -2,12 +2,12 @@
 
   <!-- Banner de bienvenida -->
   <section class="hero rounded-4 shadow-sm p-4 p-md-5 mb-4">
-    <p class="hero-eyebrow mb-1">Panel principal</p>
-    <h1 class="hero-title mb-2">Bienvenido, {{ Nombre }}!</h1>
+    <p class="hero-eyebrow mb-1">{{ 'HOME.TITLE' | translate }}</p>
+    <h1 class="hero-title mb-2">{{ 'HOME.WELCOME' | translate:{ name: Nombre } }}</h1>
     <p class="hero-text mb-4">
-      Desde aquí puedes revisar tus horarios, registrar tus pagos y consultar tus contratos.
+      {{ 'HOME.DESCRIPTION' | translate }}
     </p>
-    <a routerLink="/horarios" class="btn btn-gold fw-bold px-4">Ver horarios</a>
+    <a routerLink="/horarios" class="btn btn-gold fw-bold px-4">{{ 'HOME.VIEW_SCHEDULES' | translate }}</a>
   </section>
 
   <!-- Accesos rápidos -->
@@ -17,8 +17,8 @@
         <div class="card quick-card h-100 shadow-sm">
           <div class="card-body">
             <div class="quick-icon mb-3">🕒</div>
-            <h2 class="h5 text-dark">Horarios</h2>
-            <p class="text-secondary mb-0">Consulta los horarios disponibles y elige el tuyo.</p>
+            <h2 class="h5 text-dark">{{ 'NAV.SCHEDULES' | translate }}</h2>
+            <p class="text-secondary mb-0">{{ 'HOME.SCHEDULES_DESCRIPTION' | translate }}</p>
           </div>
         </div>
       </a>
@@ -29,8 +29,8 @@
         <div class="card quick-card h-100 shadow-sm">
           <div class="card-body">
             <div class="quick-icon mb-3">💳</div>
-            <h2 class="h5 text-dark">Registro de pagos</h2>
-            <p class="text-secondary mb-0">Paga tu inscripción con tarjeta o PayPal.</p>
+            <h2 class="h5 text-dark">{{ 'HOME.PAYMENTS' | translate }}</h2>
+            <p class="text-secondary mb-0">{{ 'HOME.PAYMENTS_DESCRIPTION' | translate }}</p>
           </div>
         </div>
       </a>
@@ -41,8 +41,8 @@
         <div class="card quick-card h-100 shadow-sm">
           <div class="card-body">
             <div class="quick-icon mb-3">📄</div>
-            <h2 class="h5 text-dark">Contratos</h2>
-            <p class="text-secondary mb-0">Revisa el estado y las fechas de tu contrato.</p>
+            <h2 class="h5 text-dark">{{ 'NAV.CONTRACTS' | translate }}</h2>
+            <p class="text-secondary mb-0">{{ 'HOME.CONTRACTS_DESCRIPTION' | translate }}</p>
           </div>
         </div>
       </a>

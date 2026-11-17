@@ -1,39 +1,77 @@
+<div class="horarios-page">
 
-@if (loading) {
-<app-loading></app-loading>
-}
-
-<div class="container mt-3 mb-5">
-  <div class="row g-3">
-    @for (h of Horario; track h.ID_Horario) {
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card h-100">
-          <div class="card-header fw-bold">
-            {{ h.PrimerDia.Dia }} y {{ h.SegundoDia.Dia }}
-          </div>
+  @if (loading) {
+    <app-loading></app-loading>
+  }
   
-          <div class="card-body">
-            <h5 class="card-title">
-              {{ h.Hora_Inicio }} - {{ h.Hora_Fin}}
-            </h5>
-            <p class="card-text mb-2">Cupo máximo: {{ h.Cumpo_Maximo }}</p>
-            <span class="badge"
-                  [class.text-bg-success]="h.Estado === 'Disponible'"
-                  [class.text-bg-danger]="h.Estado === 'lleno'">
-              {{ h.Estado }}
-            </span>
-          </div>
-  
-          <div class="card-footer">
-            <button class="btn btn-gold  btn-sm w-100"
-                    [disabled]="h.Estado === 'lleno'"
-                 [routerLink]="['/pagos', h.ID_Horario]"    >
-              Seleccionar
-            </button>
-          </div>
-        </div>
-      </div>
+  <div class="container mt-3 mb-5">
+    @if (!loading) {
+      <h3 class="titulo-seccion">{{ (tieneInscripcion ? 'SCHEDULES.YOUR_SCHEDULE' : 'SCHEDULES.AVAILABLE') | translate }}</h3>
     }
+
+    @if (errorMessage) {
+      <div class="alert alert-danger" role="alert">{{ errorMessage | translate }}</div>
+    }
+  
+    <div class="row g-3">
+      @for (h of Horario; track h.ID_Horario) {
+        <div class="col-12 col-md-6 col-lg-4">
+  
+          @if (tieneInscripcion) {
+            <!-- Tarjeta del usuario inscrito -->
+            <div class="horario-card">
+              <div class="horario-top">
+                <span class="horario-etiqueta">{{ 'SCHEDULES.CLASSES' | translate }}</span>
+                <span class="pill pill-ok">{{ 'SCHEDULES.ENROLLED' | translate }}</span>
+              </div>
+  
+              <div class="dias">
+                <span class="pill pill-dia">{{ ('DAYS.' + h.PrimerDia.Dia.toUpperCase()) | translate }}</span>
+                <span class="pill pill-dia">{{ ('DAYS.' + h.SegundoDia.Dia.toUpperCase()) | translate }}</span>
+              </div>
+  
+              <div class="horario-hora">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <polyline points="12 7 12 12 15 14"></polyline>
+                </svg>
+                <div>
+                  <p class="hora-texto">{{ h.Hora_Inicio }} - {{ h.Hora_Fin }}</p>
+                  <p class="hora-sub">{{ 'SCHEDULES.ONE_HOUR' | translate }}</p>
+                </div>
+              </div>
+            </div>
+  
+          } @else {
+            <!-- Tarjeta de horario disponible -->
+            <div class="horario-card">
+              <div class="dias">
+                <span class="pill pill-dia">{{ ('DAYS.' + h.PrimerDia.Dia.toUpperCase()) | translate }}</span>
+                <span class="pill pill-dia">{{ ('DAYS.' + h.SegundoDia.Dia.toUpperCase()) | translate }}</span>
+              </div>
+  
+              <p class="hora-texto mb-2">{{ h.Hora_Inicio }} - {{ h.Hora_Fin }}</p>
+              <p class="hora-sub mb-3">{{ 'SCHEDULES.MAX_CAPACITY' | translate:{ capacity: h.Cumpo_Maximo } }}</p>
+  
+              <div class="horario-top">
+                <span class="pill"
+                      [class.pill-ok]="h.Estado === 'Disponible'"
+                      [class.pill-lleno]="h.Estado === 'lleno'">
+                  {{ (h.Estado === 'Disponible' ? 'SCHEDULES.STATUS_AVAILABLE' : 'SCHEDULES.STATUS_FULL') | translate }}
+                </span>
+              </div>
+  
+              <button class="btn btn-gold btn-sm w-100 mt-3"
+                      [disabled]="h.Estado === 'lleno'"
+                      [routerLink]="['/pagos', h.ID_Horario]">
+                {{ 'SCHEDULES.SELECT' | translate }}
+              </button>
+            </div>
+          }
+  
+        </div>
+      }
+    </div>
   </div>
 </div>
-

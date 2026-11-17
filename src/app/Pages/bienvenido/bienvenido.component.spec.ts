@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { BienvenidoComponent } from './bienvenido.component';
 
@@ -8,7 +9,7 @@ describe('BienvenidoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BienvenidoComponent]
+      imports: [BienvenidoComponent, TranslateModule.forRoot()]
     })
     .compileComponents();
     

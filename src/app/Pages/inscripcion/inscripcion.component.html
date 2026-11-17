@@ -1,20 +1,24 @@
-<!-- Aquí va tu card del horario (Lunes y Miércoles, 10:00 - 11:00, etc.) -->
 
 <div class="container my-3">
   <div class="card shadow-sm">
-    <div class="card-header fw-bold">Método de pago</div>
+    <div class="card-header fw-bold">{{ 'PAYMENT.METHOD' | translate }}</div>
 
     <form class="card-body" [formGroup]="MetodoForm" (ngSubmit)="pagar()">
 
       @if (pagoExitoso) {
         <div class="alert alert-success" role="alert">
-          ¡Pago realizado con éxito! Redirigiendo al dashboard...
+          {{ 'PAYMENT.SUCCESS_REDIRECT' | translate }}
+        </div>
+      }
+      @if (errorEnPago) {
+        <div class="alert alert-danger" role="alert">
+          {{ 'ERRORS.PAYMENT' | translate }}
         </div>
       }
 
-      <label for="Metodo_Pago" class="form-label">Selecciona cómo quieres pagar</label>
+      <label for="Metodo_Pago" class="form-label">{{ 'PAYMENT.CHOOSE_METHOD' | translate }}</label>
       <select class="form-select mb-3" id="Metodo_Pago" formControlName="Metodo_Pago">
-        <option value="" disabled>Selecciona una opción de pago</option>
+        <option value="" disabled>{{ 'COMMON.SELECT_OPTION' | translate }}</option>
         <option value="Tarjeta">Tarjeta</option>
         <option value="Paypal">PayPal</option>
       </select>
@@ -23,18 +27,18 @@
         <hr class="my-3">
 
         <div class="mb-3">
-          <label for="titular" class="form-label">Titular de la tarjeta</label>
-          <input id="titular" type="text" class="form-control" placeholder="Nombre como aparece en la tarjeta">
+          <label for="titular" class="form-label">{{ 'PAYMENT.CARDHOLDER' | translate }}</label>
+          <input id="titular" type="text" class="form-control" [placeholder]="'PAYMENT.CARDHOLDER_PLACEHOLDER' | translate">
         </div>
 
         <div class="mb-3">
-          <label for="numero" class="form-label">Número de tarjeta</label>
+          <label for="numero" class="form-label">{{ 'PAYMENT.CARD_NUMBER' | translate }}</label>
           <input id="numero" type="text" class="form-control" placeholder="0000 0000 0000 0000">
         </div>
 
         <div class="row g-3 mb-4">
           <div class="col-6">
-            <label for="vencimiento" class="form-label">Fecha de expiración</label>
+            <label for="vencimiento" class="form-label">{{ 'PAYMENT.EXPIRATION' | translate }}</label>
             <input id="vencimiento" type="text" class="form-control" placeholder="MM/AA">
           </div>
           <div class="col-6">
@@ -44,7 +48,7 @@
         </div>
 
         <button type="submit" class="btn btn-gold fw-bold w-100" [disabled]="pagoExitoso">
-          Pagar
+          Pagar: {{ formatearMonto(monto) }}
         </button>
       }
 
@@ -55,7 +59,7 @@
           <button type="button" class="btn w-100 fw-bold"
                   style="background:#FFC439; color:#003087;"
                   [disabled]="pagoExitoso" (click)="pagar()">
-            Pagar con PayPal
+            {{ 'PAYMENT.PAY_WITH_PAYPAL' | translate }}
           </button>
         </div>
       }

@@ -1,36 +1,44 @@
 <div class="login-container d-flex justify-content-center align-items-center">
+  <app-language-switcher class="login-language-switcher" appearance="login"></app-language-switcher>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" >
     <div class="text-center mb-4">
       <img src="\assets\Logo.jpeg" alt="Logo" class="mb-3" style="max-width: 120px;">
-      <h2>Login</h2>
+      <h2>{{ 'LOGIN.TITLE' | translate }}</h2>
     </div>
     @if (errorMessage) {
   <div class="alert alert-danger" role="alert">
-    {{ errorMessage }}
+        {{ errorMessage | translate }}
   </div>
 }
 
     <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Correo</label>
+      <label for="exampleInputEmail1" class="form-label">{{ 'COMMON.EMAIL' | translate }}</label>
       <input type="email" class="form-control" id="exampleInputEmail1" formControlName="Correo" aria-describedby="emailHelp">
     </div>
  <div class="mb-3">
-  <label for="exampleInputPassword1" class="form-label">Password</label>
+  <label for="exampleInputPassword1" class="form-label">{{ 'COMMON.PASSWORD' | translate }}</label>
   <div class="input-group">
     <input
       [type]="mostrarPassword ? 'text' : 'password'"
       class="form-control"
       id="exampleInputPassword1"
       formControlName="Password">
-    <span class="input-group-text" style="cursor: pointer;" (click)="mostrarPassword = !mostrarPassword">
+    <span class="input-group-text" style="cursor: pointer;" [attr.aria-label]="(mostrarPassword ? 'COMMON.HIDE_PASSWORD' : 'COMMON.SHOW_PASSWORD') | translate" (click)="mostrarPassword = !mostrarPassword">
       <i class="bi" [ngClass]="mostrarPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
     </span>
   </div>
 </div>
 
     <div class="d-flex justify-content-between">
-      <button type="submit" class="btn btn-gold btn-lg" type="submit">Login</button>
-      <button type="button" class="btn btn-outline-success" routerLink="/registro" >Registro</button>
+      <button type="submit" class="btn btn-gold btn-lg">{{ 'LOGIN.SUBMIT' | translate }}</button>
+      <button type="button" class="btn btn-outline-success" routerLink="/registro">{{ 'REGISTER.TITLE' | translate }}</button>
+    </div>
+    <div class="border-top mt-4 pt-3">
+      <p class="small text-secondary mb-2">{{ 'HELP.AUTH_GUIDE_PROMPT' | translate }}</p>
+      <div class="d-flex flex-wrap gap-3">
+        <a class="small text-success" routerLink="/ayuda" [queryParams]="{ guia: 'login' }">{{ 'HELP.LOGIN_GUIDE_LINK' | translate }}</a>
+        <a class="small text-success" routerLink="/ayuda" [queryParams]="{ guia: 'registration' }">{{ 'HELP.REGISTRATION_GUIDE_LINK' | translate }}</a>
+      </div>
     </div>
   </form> 
 </div>

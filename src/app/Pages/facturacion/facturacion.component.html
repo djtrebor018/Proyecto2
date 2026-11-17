@@ -1,0 +1,83 @@
+<div class="pago-wrapper">
+  <div class="pago-card">
+
+    <div class="pago-header">
+      <div>
+        <h2>{{ 'BILLING.TITLE' | translate }}</h2>
+        <p>{{ 'BILLING.SUBTITLE' | translate }}</p>
+      </div>
+    </div>
+
+    @if (loading && !tipo_Usuario) {
+      <div class="pago-body"><p class="texto-suave">{{ 'COMMON.LOADING_DATA' | translate }}</p></div>
+    } @else {
+      <form class="pago-body" [formGroup]="MetodoForm" (ngSubmit)="pagarMensualidad()" novalidate>
+
+        @if (pagoExitoso) {
+          <div class="alerta alerta-ok">{{ 'PAYMENT.SUCCESS_REDIRECT' | translate }}</div>
+        }
+        @if (errorMsg) {
+          <div class="alerta alerta-error">{{ errorMsg | translate }}</div>
+        }
+
+        <div class="resumen">
+          <div class="fila">
+            <span>{{ 'REGISTER.USER_TYPE' | translate }}</span>
+            <span class="valor">{{ ('USER_TYPES.' + (tipo_Usuario || '').toUpperCase()) | translate }}</span>
+          </div>
+          <div class="fila total">
+            <span>{{ 'PAYMENT.TOTAL' | translate }}</span>
+            <span class="monto">{{ formatearMonto(monto) }}</span>
+          </div>
+        </div>
+
+        <label for="Metodo_Pago">{{ 'PAYMENT.METHOD' | translate }}</label>
+        <select id="Metodo_Pago" formControlName="Metodo_Pago"
+                [class.invalido]="invalido('Metodo_Pago')">
+          <option value="" disabled>{{ 'COMMON.SELECT_OPTION' | translate }}</option>
+          <option value="Tarjeta">Tarjeta</option>
+          <option value="Paypal">PayPal</option>
+        </select>
+        @if (invalido('Metodo_Pago')) {
+          <small class="error">{{ 'PAYMENT.SELECT_METHOD_ERROR' | translate }}</small>
+        }
+
+        @if (MetodoForm.value.Metodo_Pago === 'Tarjeta') {
+          <label for="titular">{{ 'PAYMENT.CARDHOLDER' | translate }}</label>
+          <input id="titular" type="text" autocomplete="cc-name"
+                 [placeholder]="'PAYMENT.CARDHOLDER_PLACEHOLDER' | translate">
+
+          <label for="numero">{{ 'PAYMENT.CARD_NUMBER' | translate }}</label>
+          <input id="numero" type="text" inputmode="numeric" maxlength="19"
+                 autocomplete="cc-number" placeholder="0000 0000 0000 0000">
+
+          <div class="dos-columnas">
+            <div>
+              <label for="vencimiento">{{ 'PAYMENT.EXPIRATION' | translate }}</label>
+              <input id="vencimiento" type="text" maxlength="5"
+                     autocomplete="cc-exp" placeholder="MM/AA">
+            </div>
+            <div>
+              <label for="cvv">CVV</label>
+              <input id="cvv" type="password" maxlength="4" inputmode="numeric"
+                     autocomplete="cc-csc" placeholder="123">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-pagar" [disabled]="loading || pagoExitoso">
+            {{ loading ? ('PAYMENT.PROCESSING' | translate) : ('PAYMENT.PAY' | translate) + ' ' + formatearMonto(monto) }}
+          </button>
+        }
+
+        @if (MetodoForm.value.Metodo_Pago === 'Paypal') {
+          <div class="alerta alerta-aviso">{{ 'PAYMENT.PAYPAL_REDIRECT' | translate }}</div>
+          <button type="submit" class="btn-pagar" [disabled]="loading || pagoExitoso">
+            {{ loading ? ('PAYMENT.PROCESSING' | translate) : ('PAYMENT.PAY_WITH_PAYPAL' | translate) }}
+          </button>
+        }
+
+        <p class="nota">{{ 'PAYMENT.DEMO_NOTICE' | translate }}</p>
+      </form>
+    }
+  </div>
+</div>
